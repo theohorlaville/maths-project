@@ -24,3 +24,8 @@ html, body {
     width: 10vw;
     text-align: center;
 }
+
+.gamemode:hover {
+    cursor: pointer;
+    background-color: white;
+}

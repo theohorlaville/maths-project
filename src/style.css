@@ -20,12 +20,29 @@ html, body {
 
 .gamemode {
     margin: 5%;
-    background-color: aliceblue;
+    background-color: lightblue;
+    color: white;
     width: 10vw;
     text-align: center;
+    border-style: solid;
+    border-color: white;
+    border-radius: 0.5px;
 }
 
 .gamemode:hover {
     cursor: pointer;
     background-color: white;
+    color: lightblue;
+    border-style: solid;
+    border-color: lightblue;
+    border-radius: 0.5px;
+
+
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
 }

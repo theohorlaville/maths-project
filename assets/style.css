@@ -1,0 +1,26 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#menu {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#difficulty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gamemode {
+    margin: 5%;
+    background-color: aliceblue;
+    width: 10vw;
+    text-align: center;
+}

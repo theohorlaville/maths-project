@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./assets/style.css">
+    <title>
+        Rand
+    </title>
+</head>
+
+<body>
+    <div id="menu">
+        <h1>IMAC WANTED</h1>
+        <div id="difficulty">
+            <H2 class="gamemode">NORMAL</H2>
+            <h2 class="gamemode">HARD</h2>
+        </div>
+</body>
+
+</html>
+
+<script>
+    var p = 0.5
+    var briqueDeBase = Math.random()
+    console.log("Lancer d'une pièce avec la probabilité de " + p + " d'avoir pile ")
+    console.log(briqueDeBase)
+    if (briqueDeBase < p) {
+        console.log("Pile !")
+    }
+    else console.log("Face !")
+
+
+    var numero = 0;
+    var chance = 0;
+    while (!(chance < briqueDeBase < chance + 1 / 6)) {
+
+        numero++
+        chance += 1 / 6;
+    }
+    console.log("Le dé est tombé sur : " + numero)
+</script>

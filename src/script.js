@@ -42,16 +42,19 @@ getValueDe(n);
 window.addEventListener("load", function () {
 
     const difficulty = document.querySelector(".gamemode")
+    const retour = document.querySelector("#retour")
+
     var jeu = document.querySelector("#jeu")
     var menu = document.querySelector("#menu")
     var footer = document.querySelector("footer")
-    var retour = this.document.querySelector("#retour")
+    var wanted = document.querySelector("#wanted")
 
     var temps = 120
     var score = 0;
     var bool = false
+    var tab_wanted = new Array(1, 2, 3, 4, 5)
 
-    display_score();
+
 
     difficulty.addEventListener("click", function () {
         menu.style.width = 0 + "%"
@@ -63,6 +66,7 @@ window.addEventListener("load", function () {
     })
 
     retour.addEventListener("click", function () {
+
         menu.style.width = 100 + "%"
         jeu.style.width = 0 + "%"
         bool = false
@@ -74,7 +78,10 @@ window.addEventListener("load", function () {
 
     })
 
+    display_score()
+    display_wanted()
     setInterval(display_time, 1000)
+
 
 
     function display_time() {
@@ -91,6 +98,10 @@ window.addEventListener("load", function () {
     function display_score() {
         var scoreBoard = document.querySelector("#score")
         scoreBoard.innerHTML = "score : " + score
+    }
+
+    function display_wanted() {
+        wanted.src = "./assets/" + tab_wanted[0] + ".png"
     }
 
 })

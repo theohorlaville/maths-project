@@ -1,6 +1,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
 a {
@@ -21,9 +22,10 @@ footer {
 
 canvas {
     border: 2.5px solid lightblue;
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     background-color: white;
+    margin-bottom: 2%;
 }
 
 #main {
@@ -87,4 +89,8 @@ canvas {
     align-items: center;
     justify-content: space-around;
     width: 400px;
+}
+
+#retour {
+    cursor: pointer;
 }

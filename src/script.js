@@ -45,6 +45,7 @@ window.addEventListener("load", function () {
     var jeu = document.querySelector("#jeu")
     var menu = document.querySelector("#menu")
     var footer = document.querySelector("footer")
+    var retour = this.document.querySelector("#retour")
 
     var temps = 120
     var score = 0;
@@ -59,6 +60,18 @@ window.addEventListener("load", function () {
         setTimeout(function () {
             footer.style.display = "none";
         }, 150)
+    })
+
+    retour.addEventListener("click", function () {
+        menu.style.width = 100 + "%"
+        jeu.style.width = 0 + "%"
+        bool = false
+        temps = 120
+        score = 0
+        setTimeout(function () {
+            footer.style.display = "flex";
+        }, 150)
+
     })
 
     setInterval(display_time, 1000)

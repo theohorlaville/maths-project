@@ -53,6 +53,10 @@ window.addEventListener("load", function () {
     var score = 0;
     var bool = false
     var tab_wanted = new Array(1, 2, 3, 4, 5)
+    var gamemode;
+
+    var canvas = document.querySelector('canvas');
+    context = canvas.getContext('2d');
 
 
 
@@ -81,6 +85,7 @@ window.addEventListener("load", function () {
     display_score()
     display_wanted()
     setInterval(display_time, 1000)
+    draw_image()
 
 
 
@@ -104,4 +109,12 @@ window.addEventListener("load", function () {
         wanted.src = "./assets/" + tab_wanted[0] + ".png"
     }
 
+
+    function draw_image() {
+        base_image = new Image();
+        base_image.src = './assets/1.png';
+        base_image.onload = function () {
+            context.drawImage(base_image, 0, 0, 20, 20);
+        }
+    }
 })

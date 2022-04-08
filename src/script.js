@@ -1,44 +1,4 @@
 
-function densite() {
-
-}
-
-let p = 0.5
-function getPileorFace(p) {
-    let nombreRandom = Math.random();
-    if (nombreRandom > p) {
-        console.log("pile")
-    } else {
-        console.log("face")
-    }
-}
-
-getPileorFace(p);
-
-let n = 1 / 6;
-
-function getValueDe(n) {
-    let nombreRandom = Math.random();
-    let valueDe = 1;
-    let chanceValue = 0;
-    let isFalse = false;
-
-    while (!isFalse) {
-
-        if (chanceValue < nombreRandom && nombreRandom < (chanceValue + n)) {
-            console.log(valueDe)
-            console.log(chanceValue, nombreRandom, chanceValue + n)
-            isFalse = true;
-        }
-
-        chanceValue += n;
-        valueDe++
-
-    }
-}
-
-getValueDe(n);
-
 window.addEventListener("load", function () {
 
     const difficulty = document.querySelector(".gamemode")
@@ -85,8 +45,8 @@ window.addEventListener("load", function () {
     display_score()
     display_wanted()
     setInterval(display_time, 1000)
-    draw_image()
-
+    setInterval(draw_image, 1000)
+    //draw_image()
 
 
     function display_time() {
@@ -109,12 +69,17 @@ window.addEventListener("load", function () {
         wanted.src = "./assets/" + tab_wanted[0] + ".png"
     }
 
+    let dx = 0
 
     function draw_image() {
         base_image = new Image();
+        dx+=10
         base_image.src = './assets/1.png';
         base_image.onload = function () {
-            context.drawImage(base_image, 0, 0, 20, 20);
+            context.drawImage(base_image, dx, 0, 20, 20);
         }
+        context.clearRect(0, 0, canvas.width, canvas.height);
+       // requestAnimationFrame(draw_image);
+
     }
 })

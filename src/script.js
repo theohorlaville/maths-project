@@ -69,14 +69,26 @@ window.addEventListener("load", function () {
         wanted.src = "./assets/" + tab_wanted[0] + ".png"
     }
 
-    let dx = 0
+    let image_position_x = 0.05
+    let image_direction = 10
 
     function draw_image() {
         base_image = new Image();
-        dx+=10
         base_image.src = './assets/1.png';
+
+        if(image_position_x > 0  && image_position_x < canvas.width) {
+            
+            image_position_x += image_direction
+            console.log(image_direction)
+        }
+        else {
+            image_direction *= -1
+            image_position_x += image_direction
+            console.log('cc')
+        }
+
         base_image.onload = function () {
-            context.drawImage(base_image, dx, 0, 20, 20);
+            context.drawImage(base_image, image_position_x, 0, 20, 20);
         }
         context.clearRect(0, 0, canvas.width, canvas.height);
        // requestAnimationFrame(draw_image);

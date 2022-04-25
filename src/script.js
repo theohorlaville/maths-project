@@ -13,7 +13,8 @@ window.addEventListener("load", function () {
     var score = 0;
     var bool = false
     var tab_wanted = new Array(1, 2, 3, 4, 5)
-    var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png"]
+    var wanted_number;
+    var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png", "./assets/4.png", "./assets/5.png", "./assets/6.png"]
 
     var canvas = document.querySelector('canvas');
     context = canvas.getContext('2d');
@@ -25,9 +26,7 @@ window.addEventListener("load", function () {
         menu.style.width = 0 + "%"
         jeu.style.width = 100 + "%"
         bool = true
-        change_wanted()
-        display_score()
-
+        start()
         setTimeout(function () {
             footer.style.display = "none";
         }, 150)
@@ -53,12 +52,10 @@ window.addEventListener("load", function () {
     let image_direction = 1
     const images = []; /// array to hold images.
     var imageCount = 0;
-    let wantedPosX = 0
-    let wantedPosY = 0
 
     setInterval(display_time, 1000)
 
-    load_images()
+
 
     /* ------------- random positon image ------------------ */
     function getRandomArbitrary(min, max) {
@@ -71,10 +68,20 @@ window.addEventListener("load", function () {
     let image_direction_x = getRandomArbitrary(5, 15)
     let image_direction_y = getRandomArbitrary(0, 10)
 
+    let wanted_position_x = 0;
+    let wanted_position_y = 0;
+
+
     // move speed : the more the second number is low the more the images are fast
     //draw_image()
 
 
+    function start() {
+        change_wanted()
+        display_score()
+        load_images()
+        set_position_wanted()
+    }
 
 
     function display_time() {
@@ -109,7 +116,8 @@ window.addEventListener("load", function () {
     }
 
     function change_wanted() {
-        display_wanted(Math.round(getRandomArbitrary(0, 4)))
+        wanted_number = Math.round(getRandomArbitrary(0, 4))
+        display_wanted(wanted_number)
     }
 
     function load_images() {
@@ -120,6 +128,7 @@ window.addEventListener("load", function () {
                 imageCount += 1;
                 if (imageCount === imageURL.length) { // have all loaded????
                     requestAnimationFrame(animate);
+                    change_wanted()
                 }
             }
             images.push(image); // add loading image to images array
@@ -127,7 +136,21 @@ window.addEventListener("load", function () {
         });
     }
 
+    function set_position_wanted() {
+        wanted_position_x = getRandomArbitrary(1, canvas.width - 1)
+        wanted_position_y = getRandomArbitrary(1, canvas.height - 1)
+
+    }
+
     function animation_wanted() {
+        if (wanted_position_x > 0 && wanted_position_x < canvas.width) {
+
+            wanted_position_x += image_direction
+        }
+        else {
+            image_direction *= -1
+            wanted_position_x += image_direction
+        }
 
     }
 
@@ -152,7 +175,7 @@ window.addEventListener("load", function () {
         animation_wanted()
         animation_bystander()
 
-        context.drawImage(images[tab_wanted[1]], 0, 0, 30, 30);
+        context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, 30, 30);
 
         /*
         pasX = 5
@@ -181,12 +204,14 @@ window.addEventListener("load", function () {
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
 
-        if (x >= wantedPosX && x <= wantedPosX + 30) {
 
-            if (y >= wantedPosY && y <= wantedPosY + 30) {
+        if (x >= wanted_position_x && x <= wanted_position_x + 30) {
+            if (y >= wanted_position_y && y <= wanted_position_y + 30) {
+
                 add_score()
                 add_time()
                 change_wanted()
+                set_position_wanted()
             }
         }
     }

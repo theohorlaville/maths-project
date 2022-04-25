@@ -1,7 +1,7 @@
 
 window.addEventListener("load", function () {
 
-    const difficulty = document.querySelectorAll(".gamemode")
+    const play = document.querySelector(".play")
     const retour = document.querySelector("#retour")
 
     var jeu = document.querySelector("#jeu")
@@ -20,16 +20,19 @@ window.addEventListener("load", function () {
 
 
 
-    difficulty.forEach(i => {
-        i.addEventListener("click", function () {
-            menu.style.width = 0 + "%"
-            jeu.style.width = 100 + "%"
-            bool = true
-            setTimeout(function () {
-                footer.style.display = "none";
-            }, 150)
-        })
+
+    play.addEventListener("click", function () {
+        menu.style.width = 0 + "%"
+        jeu.style.width = 100 + "%"
+        bool = true
+        change_wanted()
+        display_score()
+
+        setTimeout(function () {
+            footer.style.display = "none";
+        }, 150)
     })
+
 
     retour.addEventListener("click", function () {
 
@@ -45,8 +48,6 @@ window.addEventListener("load", function () {
 
     })
 
-    display_score()
-    display_wanted()
 
 
     let image_direction = 1
@@ -93,8 +94,22 @@ window.addEventListener("load", function () {
         scoreBoard.innerHTML = "score : " + score
     }
 
-    function display_wanted() {
-        wanted.src = "./assets/" + tab_wanted[1] + ".png"
+    function display_wanted(i) {
+        wanted.src = "./assets/" + tab_wanted[i] + ".png"
+    }
+
+    function add_time() {
+        temps += 2;
+        display_time()
+    }
+
+    function add_score() {
+        score++
+        display_score()
+    }
+
+    function change_wanted() {
+        display_wanted(Math.round(getRandomArbitrary(0, 4)))
     }
 
     function load_images() {
@@ -112,6 +127,20 @@ window.addEventListener("load", function () {
         });
     }
 
+    function animation_wanted() {
+
+    }
+
+    function animation_bystander() {
+        if (image_position_x > 0 && image_position_x < canvas.width) {
+
+            image_position_x += image_direction
+        }
+        else {
+            image_direction *= -1
+            image_position_x += image_direction
+        }
+    }
 
 
     function animate() {
@@ -120,30 +149,27 @@ window.addEventListener("load", function () {
         let pasY = 0
 
 
-        if (image_position_x > 0 && image_position_x + (9 * 10) < canvas.width) {
+        animation_wanted()
+        animation_bystander()
 
-            image_position_x += image_direction
-        }
-        else {
-            image_direction *= -1
-            image_position_x += image_direction
-        }
+        context.drawImage(images[tab_wanted[1]], 0, 0, 30, 30);
 
-
-
-
-        context.drawImage(images[1], 0, 0, 30, 30);
-
-
-
+        /*
         pasX = 5
         pasY = 0
-
+        
         for (let i = 1; i < 10; i++) {
             pasX += 15
             context.drawImage(images[2], image_position_x + pasX, 10, 30, 30);
         }
 
+        pasX = 10
+        pasY = 0
+        for (let i = 1; i < 10; i++) {
+            pasX += 15
+            context.drawImage(images[1], image_position_x + pasX, 20, 30, 30);
+        }
+        */
 
 
         requestAnimationFrame(animate);
@@ -158,13 +184,11 @@ window.addEventListener("load", function () {
         if (x >= wantedPosX && x <= wantedPosX + 30) {
 
             if (y >= wantedPosY && y <= wantedPosY + 30) {
-                score++
-                display_score()
-
+                add_score()
+                add_time()
+                change_wanted()
             }
         }
-
-
     }
 
     canvas.addEventListener('mousedown', function (e) {

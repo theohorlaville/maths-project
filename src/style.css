@@ -51,7 +51,7 @@ canvas {
     align-items: center;
 }
 
-.gamemode {
+.play {
     margin: 5%;
     background-color: lightblue;
     color: white;
@@ -62,7 +62,7 @@ canvas {
     border-radius: 0.5px;
 }
 
-.gamemode:hover {
+.play:hover {
     cursor: pointer;
     background-color: white;
     color: lightblue;

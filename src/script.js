@@ -13,6 +13,7 @@ window.addEventListener("load", function () {
     var score = 0;
     var bool = false
     var tab_wanted = new Array(1, 2, 3, 4, 5)
+    var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png"]
 
     var canvas = document.querySelector('canvas');
     context = canvas.getContext('2d');
@@ -37,6 +38,7 @@ window.addEventListener("load", function () {
         bool = false
         temps = 120
         score = 0
+        display_score()
         setTimeout(function () {
             footer.style.display = "flex";
         }, 150)
@@ -47,13 +49,15 @@ window.addEventListener("load", function () {
     display_wanted()
 
 
-    let image_direction = 5
-    base_image = new Image();
-    base_image.src = './assets/' + 1 + '.png';
-
-
+    let image_direction = 1
+    const images = []; /// array to hold images.
+    var imageCount = 0;
+    let wantedPosX = 0
+    let wantedPosY = 0
 
     setInterval(display_time, 1000)
+
+    load_images()
 
     /* ------------- random positon image ------------------ */
     function getRandomArbitrary(min, max) {
@@ -68,7 +72,6 @@ window.addEventListener("load", function () {
 
     // move speed : the more the second number is low the more the images are fast
     //draw_image()
-    requestAnimationFrame(animate);
 
 
 
@@ -91,20 +94,33 @@ window.addEventListener("load", function () {
     }
 
     function display_wanted() {
-        wanted.src = "./assets/" + tab_wanted[0] + ".png"
+        wanted.src = "./assets/" + tab_wanted[1] + ".png"
+    }
+
+    function load_images() {
+        imageURL.forEach(src => {  // for each image url
+            const image = new Image();
+            image.src = src;
+            image.onload = () => {
+                imageCount += 1;
+                if (imageCount === imageURL.length) { // have all loaded????
+                    requestAnimationFrame(animate);
+                }
+            }
+            images.push(image); // add loading image to images array
+
+        });
     }
 
 
 
-
-
     function animate() {
-
-        let pas = 5;
         context.clearRect(0, 0, canvas.width, canvas.height);
+        let pasX = 5;
+        let pasY = 0
 
-        console.log("test")
-        if (image_position_x > 0 && image_position_x + pas * 9 < canvas.width) {
+
+        if (image_position_x > 0 && image_position_x + (9 * 10) < canvas.width) {
 
             image_position_x += image_direction
         }
@@ -113,26 +129,46 @@ window.addEventListener("load", function () {
             image_position_x += image_direction
         }
 
-        for (let i = 1; i < 10; i++) {
-            pas += 10
-            context.drawImage(base_image, image_position_x + pas, 0, 20, 20);
 
+
+
+        context.drawImage(images[1], 0, 0, 30, 30);
+
+
+
+        pasX = 5
+        pasY = 0
+
+        for (let i = 1; i < 10; i++) {
+            pasX += 15
+            context.drawImage(images[2], image_position_x + pasX, 10, 30, 30);
         }
+
 
 
         requestAnimationFrame(animate);
 
     }
 
-    function getCursorPosition(canvas, event) {
+    function player_guess(canvas, event) {
         const rect = canvas.getBoundingClientRect()
         const x = event.clientX - rect.left
         const y = event.clientY - rect.top
-        console.log("x: " + x + " y: " + y)
+
+        if (x >= wantedPosX && x <= wantedPosX + 30) {
+
+            if (y >= wantedPosY && y <= wantedPosY + 30) {
+                score++
+                display_score()
+
+            }
+        }
+
+
     }
 
     canvas.addEventListener('mousedown', function (e) {
-        getCursorPosition(canvas, e)
+        player_guess(canvas, e)
     })
 
 })

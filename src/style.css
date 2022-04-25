@@ -22,11 +22,10 @@ footer {
 
 canvas {
     border: 2.5px solid lightblue;
-    width: 500px;
-    height: 500px;
     background-color: white;
     margin-bottom: 2%;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 #main {

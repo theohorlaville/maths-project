@@ -47,7 +47,6 @@ window.addEventListener("load", function () {
     display_wanted()
 
 
-    let image_position_x = 0.05
     let image_direction = 5
     base_image = new Image();
     base_image.src = './assets/' + 1 + '.png';
@@ -56,17 +55,16 @@ window.addEventListener("load", function () {
 
     setInterval(display_time, 1000)
 
-      /* ------------- random positon image ------------------ */
-      function getRandomArbitrary(min, max) {
+    /* ------------- random positon image ------------------ */
+    function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
-      }
-    
+    }
+
     // random departure position
-    let image_position_x = getRandomArbitrary(1,canvas.width-1)
-    let image_position_y = getRandomArbitrary(1,canvas.height-1)
-    let image_direction_x = getRandomArbitrary(5,15)
-    let image_direction_y = getRandomArbitrary(0,10)
-    setInterval(draw_image, 500) 
+    let image_position_x = getRandomArbitrary(1, canvas.width - 1)
+    let image_position_y = getRandomArbitrary(1, canvas.height - 1)
+    let image_direction_x = getRandomArbitrary(5, 15)
+    let image_direction_y = getRandomArbitrary(0, 10)
 
     // move speed : the more the second number is low the more the images are fast
     //draw_image()

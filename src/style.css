@@ -26,6 +26,7 @@ canvas {
     height: 500px;
     background-color: white;
     margin-bottom: 2%;
+    cursor: pointer;
 }
 
 #main {
@@ -95,3 +96,4 @@ canvas {
 #retour {
     cursor: pointer;
 }
+

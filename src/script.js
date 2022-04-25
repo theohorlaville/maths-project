@@ -1,7 +1,7 @@
 
 window.addEventListener("load", function () {
 
-    const difficulty = document.querySelector(".gamemode")
+    const difficulty = document.querySelectorAll(".gamemode")
     const retour = document.querySelector("#retour")
 
     var jeu = document.querySelector("#jeu")
@@ -13,20 +13,21 @@ window.addEventListener("load", function () {
     var score = 0;
     var bool = false
     var tab_wanted = new Array(1, 2, 3, 4, 5)
-    var gamemode;
 
     var canvas = document.querySelector('canvas');
     context = canvas.getContext('2d');
 
 
 
-    difficulty.addEventListener("click", function () {
-        menu.style.width = 0 + "%"
-        jeu.style.width = 100 + "%"
-        bool = true
-        setTimeout(function () {
-            footer.style.display = "none";
-        }, 150)
+    difficulty.forEach(i => {
+        i.addEventListener("click", function () {
+            menu.style.width = 0 + "%"
+            jeu.style.width = 100 + "%"
+            bool = true
+            setTimeout(function () {
+                footer.style.display = "none";
+            }, 150)
+        })
     })
 
     retour.addEventListener("click", function () {
@@ -44,9 +45,19 @@ window.addEventListener("load", function () {
 
     display_score()
     display_wanted()
+
+
+    let image_position_x = 0.05
+    let image_direction = 5
+    base_image = new Image();
+    base_image.src = './assets/' + 1 + '.png';
+
+
+
     setInterval(display_time, 1000)
-    setInterval(draw_image, 1000)
-    //draw_image()
+    requestAnimationFrame(animate);
+
+
 
 
     function display_time() {
@@ -54,9 +65,10 @@ window.addEventListener("load", function () {
             var timer = document.querySelector("#timer")
             temps--
             if (temps >= 0) {
-                console.log("test")
                 timer.innerHTML = "temps restant : " + temps
+
             }
+            else bool = false;
         }
     }
 
@@ -69,29 +81,45 @@ window.addEventListener("load", function () {
         wanted.src = "./assets/" + tab_wanted[0] + ".png"
     }
 
-    let image_position_x = 0.05
-    let image_direction = 10
 
-    function draw_image() {
-        base_image = new Image();
-        base_image.src = './assets/1.png';
 
-        if(image_position_x > 0  && image_position_x < canvas.width) {
-            
+
+
+    function animate() {
+
+        let pas = 5;
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        console.log("test")
+        if (image_position_x > 0 && image_position_x + pas * 9 < canvas.width) {
+
             image_position_x += image_direction
-            console.log(image_direction)
         }
         else {
             image_direction *= -1
             image_position_x += image_direction
-            console.log('cc')
         }
 
-        base_image.onload = function () {
-            context.drawImage(base_image, image_position_x, 0, 20, 20);
+        for (let i = 1; i < 10; i++) {
+            pas += 10
+            context.drawImage(base_image, image_position_x + pas, 0, 20, 20);
+
         }
-        context.clearRect(0, 0, canvas.width, canvas.height);
-       // requestAnimationFrame(draw_image);
+
+
+        requestAnimationFrame(animate);
 
     }
+
+    function getCursorPosition(canvas, event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        console.log("x: " + x + " y: " + y)
+    }
+
+    canvas.addEventListener('mousedown', function (e) {
+        getCursorPosition(canvas, e)
+    })
+
 })

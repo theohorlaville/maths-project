@@ -12,8 +12,9 @@ window.addEventListener("load", function () {
     var temps = 120
     var score = 0;
     var bool = false
-    var tab_wanted = new Array(1, 2, 3, 4, 5)
     var wanted_number;
+    var img_size = 30;
+
     var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png", "./assets/4.png", "./assets/5.png", "./assets/6.png"]
 
     var canvas = document.querySelector('canvas');
@@ -49,7 +50,6 @@ window.addEventListener("load", function () {
 
 
 
-    let image_direction = 1
     const images = []; /// array to hold images.
     var imageCount = 0;
 
@@ -65,12 +65,14 @@ window.addEventListener("load", function () {
     // random departure position
     let image_position_x = getRandomArbitrary(1, canvas.width - 1)
     let image_position_y = getRandomArbitrary(1, canvas.height - 1)
-    let image_direction_x = getRandomArbitrary(5, 15)
-    let image_direction_y = getRandomArbitrary(0, 10)
 
+    let wanted_direction_x = Math.cos(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 10);
+    let wanted_direction_y = Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 10);
     let wanted_position_x = 0;
     let wanted_position_y = 0;
 
+    let image_direction = 1
+    let rad = 20;
 
     // move speed : the more the second number is low the more the images are fast
     //draw_image()
@@ -102,7 +104,8 @@ window.addEventListener("load", function () {
     }
 
     function display_wanted(i) {
-        wanted.src = "./assets/" + tab_wanted[i] + ".png"
+        i++
+        wanted.src = "./assets/" + i + ".png"
     }
 
     function add_time() {
@@ -137,13 +140,13 @@ window.addEventListener("load", function () {
     }
 
     function set_position_wanted() {
-        wanted_position_x = getRandomArbitrary(1, canvas.width - 1)
-        wanted_position_y = getRandomArbitrary(1, canvas.height - 1)
-
+        wanted_position_x = getRandomArbitrary(1, canvas.width - 15)
+        wanted_position_y = getRandomArbitrary(1, canvas.height - 15)
     }
 
     function animation_wanted() {
-        if (wanted_position_x > 0 && wanted_position_x < canvas.width) {
+        /*
+        if (wanted_position_x > 0 && wanted_position_x + image_direction + (img_size / 2) < canvas.width) {
 
             wanted_position_x += image_direction
         }
@@ -151,10 +154,17 @@ window.addEventListener("load", function () {
             image_direction *= -1
             wanted_position_x += image_direction
         }
+        */
+        if (wanted_position_x > canvas.width - rad || wanted_position_x < rad) wanted_direction_x = -wanted_direction_x;
+        if (wanted_position_y > canvas.height - rad || wanted_position_y < rad) wanted_direction_y = -wanted_direction_y;
+
+        wanted_position_x += wanted_direction_x;
+        wanted_position_y += wanted_direction_y;
 
     }
 
     function animation_bystander() {
+        /*
         if (image_position_x > 0 && image_position_x < canvas.width) {
 
             image_position_x += image_direction
@@ -162,7 +172,7 @@ window.addEventListener("load", function () {
         else {
             image_direction *= -1
             image_position_x += image_direction
-        }
+        }*/
     }
 
 
@@ -175,22 +185,23 @@ window.addEventListener("load", function () {
         animation_wanted()
         animation_bystander()
 
-        context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, 30, 30);
+        context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
 
         /*
         pasX = 5
         pasY = 0
-        
-        for (let i = 1; i < 10; i++) {
+
+        for (let i = 1; i < 300; i++) {
             pasX += 15
-            context.drawImage(images[2], image_position_x + pasX, 10, 30, 30);
+            context.drawImage(images[2], image_position_x + pasX, 10, img_size, img_size);
         }
 
         pasX = 10
         pasY = 0
-        for (let i = 1; i < 10; i++) {
+        for (let i = 1; i < 300; i++) {
             pasX += 15
-            context.drawImage(images[1], image_position_x + pasX, 20, 30, 30);
+            pasY = 5 * (i % 10)
+            context.drawImage(images[1], image_position_x + pasX, 20 + pasY, img_size, img_size);
         }
         */
 

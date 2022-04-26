@@ -2,19 +2,22 @@
 window.addEventListener("load", function () {
 
     // VARIABLES DU DOM
-    const play = document.querySelector(".play")
+    const play = document.querySelectorAll(".play")
     const retour = document.querySelector("#retour")
-
+    const return_endgame = document.querySelector(".return")
+    var timer = document.querySelector("#timer")
     var jeu = document.querySelector("#jeu")
     var menu = document.querySelector("#menu")
+    var gameover = this.document.querySelector("#gameover")
+    var scoreBoard = document.querySelectorAll(".score")
     var footer = document.querySelector("footer")
     var wanted = document.querySelector("#wanted")
     var canvas = document.querySelector('canvas');
     context = canvas.getContext('2d');
 
     // VARIABLES GLOBALES JEU
-    var temps = 120
-    var score = 0;
+    var temps;
+    var score;
     var bool = false
     var wanted_number;
 
@@ -25,6 +28,7 @@ window.addEventListener("load", function () {
     var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png", "./assets/4.png", "./assets/5.png", "./assets/6.png"]
     var imageCount = 0;
     var img_size = 30;
+    var imageload = false;
 
     // VARIABLES POSITION/DIRECTION DES BYSTANDERS ET DU WANTED
 
@@ -39,9 +43,9 @@ window.addEventListener("load", function () {
 
 
 
-    // CLICK SUR LE BOUTON PLAY : LANCEMENT DU JEU ET CHANGEMENT DE FENETRE
+    // CLICK SUR LE BOUTON PLAY DU MENU : LANCEMENT DU JEU ET CHANGEMENT DE FENETRE
 
-    play.addEventListener("click", function () {
+    play[0].addEventListener("click", function () {
         menu.style.width = 0 + "%"
         jeu.style.width = 100 + "%"
         bool = true
@@ -51,6 +55,12 @@ window.addEventListener("load", function () {
         }, 150)
     })
 
+    play[1].addEventListener("click", function () {
+        bool = true
+        gameover.style.display = "none"
+        start()
+    })
+
     // CLICK SUR LE BOUTON RETOUR : RENITIALISATION DU JEU ET CHANGEMENT DE FENETRE
 
     retour.addEventListener("click", function () {
@@ -58,9 +68,21 @@ window.addEventListener("load", function () {
         menu.style.width = 100 + "%"
         jeu.style.width = 0 + "%"
         bool = false
-        temps = 120
-        score = 0
-        display_score()
+        gameover.style.display = "none"
+
+        setTimeout(function () {
+            footer.style.display = "flex";
+        }, 150)
+
+    })
+
+    return_endgame.addEventListener("click", function () {
+
+        menu.style.width = 100 + "%"
+        jeu.style.width = 0 + "%"
+        bool = false
+        gameover.style.display = "none"
+
         setTimeout(function () {
             footer.style.display = "flex";
         }, 150)
@@ -77,25 +99,35 @@ window.addEventListener("load", function () {
     // LANCEMENT DU JEU : AFFICHAGE D'UN NOUVEAU WANTED, DU SCORE, CHARGEMENT DES IMG, INITIALISATION DU WANTED SUR LE CANVAS
 
     function start() {
+        initializing_game_infos()
+        initializing_wanted()
         change_wanted()
         display_score()
-        load_images()
-        initializing_wanted()
+        if (!imageload) {
+            load_images()
+        }
+        else requestAnimationFrame(animate);
     }
 
     // FIN DU JEU : BOOL SI TEMPS FINI
 
     function finish() {
         if (temps == 0) {
+            gameover.style.display = "flex"
             return true;
         }
     }
+
+    function initializing_game_infos() {
+        temps = 2;
+        score = 0;
+    }
+
 
     // AFFICHAGE DU TEMPS : DEPEND DU BOOLEEN
 
     function display_time() {
         if (bool) {
-            var timer = document.querySelector("#timer")
             temps--
             if (temps >= 0) {
                 timer.innerHTML = "temps restant : " + temps
@@ -109,8 +141,9 @@ window.addEventListener("load", function () {
     // AFFICHAGE DU SCORE
 
     function display_score() {
-        var scoreBoard = document.querySelector("#score")
-        scoreBoard.innerHTML = "score : " + score
+        scoreBoard[0].innerHTML = "score : " + score
+        scoreBoard[1].innerHTML = "score : " + score
+
     }
 
     // AFFICHAGE DU WANTED (pas sur le canvas mais en haut)
@@ -124,7 +157,6 @@ window.addEventListener("load", function () {
 
     function add_time() {
         temps += 2;
-        display_time()
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -150,8 +182,8 @@ window.addEventListener("load", function () {
             image.onload = () => {
                 imageCount += 1;
                 if (imageCount === imageURL.length) { // have all loaded????
+                    imageload = true
                     requestAnimationFrame(animate);
-                    change_wanted()
                 }
             }
             images.push(image); // add loading image to images array

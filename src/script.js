@@ -66,12 +66,11 @@ window.addEventListener("load", function () {
     let image_position_x = getRandomArbitrary(1, canvas.width - 1)
     let image_position_y = getRandomArbitrary(1, canvas.height - 1)
 
-    let wanted_direction_x = Math.cos(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 10);
-    let wanted_direction_y = Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 10);
+    let wanted_direction_x = 0;
+    let wanted_direction_y = 0;
     let wanted_position_x = 0;
     let wanted_position_y = 0;
 
-    let image_direction = 1
     let rad = 20;
 
     // move speed : the more the second number is low the more the images are fast
@@ -140,23 +139,27 @@ window.addEventListener("load", function () {
     }
 
     function set_position_wanted() {
+        let directionX = -1;
+        let directionY = -1;
+
         wanted_position_x = getRandomArbitrary(1, canvas.width - 15)
         wanted_position_y = getRandomArbitrary(1, canvas.height - 15)
+
+        if (Math.round(Math.random()) == 1) { directionX = 1; }
+        else directionX = -1;
+
+        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+
+        if (Math.round(Math.random()) == 1) { directionY = 1; }
+        else directionY = -1;
+
+        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
     }
 
     function animation_wanted() {
-        /*
-        if (wanted_position_x > 0 && wanted_position_x + image_direction + (img_size / 2) < canvas.width) {
 
-            wanted_position_x += image_direction
-        }
-        else {
-            image_direction *= -1
-            wanted_position_x += image_direction
-        }
-        */
-        if (wanted_position_x > canvas.width - rad || wanted_position_x < rad) wanted_direction_x = -wanted_direction_x;
-        if (wanted_position_y > canvas.height - rad || wanted_position_y < rad) wanted_direction_y = -wanted_direction_y;
+        if (wanted_position_x > canvas.width - rad || wanted_position_x < 0) wanted_direction_x = -wanted_direction_x;
+        if (wanted_position_y > canvas.height - rad || wanted_position_y < 0) wanted_direction_y = -wanted_direction_y;
 
         wanted_position_x += wanted_direction_x;
         wanted_position_y += wanted_direction_y;

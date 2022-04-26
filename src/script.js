@@ -1,6 +1,7 @@
 
 window.addEventListener("load", function () {
 
+    // VARIABLES DU DOM
     const play = document.querySelector(".play")
     const retour = document.querySelector("#retour")
 
@@ -8,20 +9,37 @@ window.addEventListener("load", function () {
     var menu = document.querySelector("#menu")
     var footer = document.querySelector("footer")
     var wanted = document.querySelector("#wanted")
+    var canvas = document.querySelector('canvas');
+    context = canvas.getContext('2d');
 
+    // VARIABLES GLOBALES JEU
     var temps = 120
     var score = 0;
     var bool = false
     var wanted_number;
+
+
+    // VARIABLES EN LIEN AVEC LE CHARGEMENT D'IMAGES
+
+    const images = []; /// array to hold images.
+    var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png", "./assets/4.png", "./assets/5.png", "./assets/6.png"]
+    var imageCount = 0;
     var img_size = 30;
 
-    var imageURL = ["./assets/1.png", "./assets/2.png", "./assets/3.png", "./assets/4.png", "./assets/5.png", "./assets/6.png"]
+    // VARIABLES POSITION/DIRECTION DES BYSTANDERS ET DU WANTED
 
-    var canvas = document.querySelector('canvas');
-    context = canvas.getContext('2d');
+    let image_position_x = getRandomArbitrary(1, canvas.width - 1)
+    let image_position_y = getRandomArbitrary(1, canvas.height - 1)
+
+    let wanted_direction_x = 0;
+    let wanted_direction_y = 0;
+    let wanted_position_x = 0;
+    let wanted_position_y = 0;
 
 
 
+
+    // CLICK SUR LE BOUTON PLAY : LANCEMENT DU JEU ET CHANGEMENT DE FENETRE
 
     play.addEventListener("click", function () {
         menu.style.width = 0 + "%"
@@ -33,6 +51,7 @@ window.addEventListener("load", function () {
         }, 150)
     })
 
+    // CLICK SUR LE BOUTON RETOUR : RENITIALISATION DU JEU ET CHANGEMENT DE FENETRE
 
     retour.addEventListener("click", function () {
 
@@ -49,41 +68,30 @@ window.addEventListener("load", function () {
     })
 
 
+    // FONCTION RANDOM : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
-    const images = []; /// array to hold images.
-    var imageCount = 0;
-
-    setInterval(display_time, 1000)
-
-
-
-    /* ------------- random positon image ------------------ */
     function getRandomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
     }
 
-    // random departure position
-    let image_position_x = getRandomArbitrary(1, canvas.width - 1)
-    let image_position_y = getRandomArbitrary(1, canvas.height - 1)
-
-    let wanted_direction_x = 0;
-    let wanted_direction_y = 0;
-    let wanted_position_x = 0;
-    let wanted_position_y = 0;
-
-    let rad = 20;
-
-    // move speed : the more the second number is low the more the images are fast
-    //draw_image()
-
+    // LANCEMENT DU JEU : AFFICHAGE D'UN NOUVEAU WANTED, DU SCORE, CHARGEMENT DES IMG, INITIALISATION DU WANTED SUR LE CANVAS
 
     function start() {
         change_wanted()
         display_score()
         load_images()
-        set_position_wanted()
+        initializing_wanted()
     }
 
+    // FIN DU JEU : BOOL SI TEMPS FINI
+
+    function finish() {
+        if (temps == 0) {
+            return true;
+        }
+    }
+
+    // AFFICHAGE DU TEMPS : DEPEND DU BOOLEEN
 
     function display_time() {
         if (bool) {
@@ -96,31 +104,44 @@ window.addEventListener("load", function () {
             else bool = false;
         }
     }
+    setInterval(display_time, 1000)
+
+    // AFFICHAGE DU SCORE
 
     function display_score() {
         var scoreBoard = document.querySelector("#score")
         scoreBoard.innerHTML = "score : " + score
     }
 
+    // AFFICHAGE DU WANTED (pas sur le canvas mais en haut)
+
     function display_wanted(i) {
         i++
         wanted.src = "./assets/" + i + ".png"
     }
+
+    // FONCTION RAJOUTE DU TEMPS ET ACTUALISE LE TIMER
 
     function add_time() {
         temps += 2;
         display_time()
     }
 
+    // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
+
     function add_score() {
         score++
         display_score()
     }
 
+    // CHANGE LE WANTED SUR LE CANVAS ET SUR L'AFFICHE (RANDOM ENTRE LES DIFFERENTES IMG EQUIPROBABLE)
+
     function change_wanted() {
         wanted_number = Math.round(getRandomArbitrary(0, 4))
         display_wanted(wanted_number)
     }
+
+    // CHARGEMENT DES IMAG EN ASYNCHRONE (onload), QUAND CHARGÉES LANCEMENT DU JEU
 
     function load_images() {
         imageURL.forEach(src => {  // for each image url
@@ -138,7 +159,9 @@ window.addEventListener("load", function () {
         });
     }
 
-    function set_position_wanted() {
+    // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
+
+    function initializing_wanted() {
         let directionX = -1;
         let directionY = -1;
 
@@ -156,15 +179,18 @@ window.addEventListener("load", function () {
         wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
     }
 
+    // ANIMATION DU WANTED : AVANCE ET REBONDI SUR LES MURS
+
     function animation_wanted() {
 
-        if (wanted_position_x > canvas.width - rad || wanted_position_x < 0) wanted_direction_x = -wanted_direction_x;
-        if (wanted_position_y > canvas.height - rad || wanted_position_y < 0) wanted_direction_y = -wanted_direction_y;
+        if (wanted_position_x > canvas.width - 20 || wanted_position_x < 0) wanted_direction_x = -wanted_direction_x;
+        if (wanted_position_y > canvas.height - 20 || wanted_position_y < 0) wanted_direction_y = -wanted_direction_y;
 
         wanted_position_x += wanted_direction_x;
         wanted_position_y += wanted_direction_y;
 
     }
+    // ANIMATION DES BYSTANDERS : A FAIRE
 
     function animation_bystander() {
         /*
@@ -179,11 +205,10 @@ window.addEventListener("load", function () {
     }
 
 
+    // FONCTION D'AFFICHAGE
+
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
-        let pasX = 5;
-        let pasY = 0
-
 
         animation_wanted()
         animation_bystander()
@@ -191,14 +216,6 @@ window.addEventListener("load", function () {
         context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
 
         /*
-        pasX = 5
-        pasY = 0
-
-        for (let i = 1; i < 300; i++) {
-            pasX += 15
-            context.drawImage(images[2], image_position_x + pasX, 10, img_size, img_size);
-        }
-
         pasX = 10
         pasY = 0
         for (let i = 1; i < 300; i++) {
@@ -208,10 +225,13 @@ window.addEventListener("load", function () {
         }
         */
 
-
-        requestAnimationFrame(animate);
+        if (!finish()) {
+            requestAnimationFrame(animate);
+        }
 
     }
+
+    // FONCTION DETECTION DU CLICK JOUEUR
 
     function player_guess(canvas, event) {
         const rect = canvas.getBoundingClientRect()
@@ -225,7 +245,7 @@ window.addEventListener("load", function () {
                 add_score()
                 add_time()
                 change_wanted()
-                set_position_wanted()
+                initializing_wanted()
             }
         }
     }

@@ -18,6 +18,7 @@ window.addEventListener("load", function () {
     // VARIABLES GLOBALES JEU
     var temps;
     var score;
+    var animation;
     var bool = false
     var wanted_number;
     var bystander_number = [];
@@ -33,12 +34,6 @@ window.addEventListener("load", function () {
     var imageload = false;
 
     // VARIABLES POSITION/DIRECTION DES BYSTANDERS ET DU WANTED
-
-
-    let image_direction_x = 0;
-    let image_direction_y = 0;
-    let image_position_x = 0;
-    let image_position_y = 0;
 
 
     let wanted_direction_x = 0;
@@ -75,8 +70,9 @@ window.addEventListener("load", function () {
         menu.style.width = 100 + "%"
         jeu.style.width = 0 + "%"
         bool = false
+        temps = 0;
         gameover.style.display = "none"
-
+        cancelAnimationFrame(animation)
         setTimeout(function () {
             footer.style.display = "flex";
         }, 150)
@@ -85,11 +81,13 @@ window.addEventListener("load", function () {
 
     return_endgame.addEventListener("click", function () {
 
+
         menu.style.width = 100 + "%"
         jeu.style.width = 0 + "%"
         bool = false
+        temps = 0;
         gameover.style.display = "none"
-
+        cancelAnimationFrame(animation)
         setTimeout(function () {
             footer.style.display = "flex";
         }, 150)
@@ -113,20 +111,20 @@ window.addEventListener("load", function () {
         if (!imageload) {
             load_images()
         }
-        else requestAnimationFrame(animate);
+        else animation = requestAnimationFrame(animate);
     }
 
     // FIN DU JEU : BOOL SI TEMPS FINI
 
     function finish() {
-        if (temps == 0) {
+        if (temps <= 0 && bool == true) {
             gameover.style.display = "flex"
             return true;
         }
     }
 
     function initializing_game_infos() {
-        temps = 200;
+        temps = 10;
         score = 0;
         change_wanted()
     }
@@ -191,7 +189,7 @@ window.addEventListener("load", function () {
                 imageCount += 1;
                 if (imageCount === imageURL.length) { // have all loaded????
                     imageload = true
-                    requestAnimationFrame(animate);
+                    animation = requestAnimationFrame(animate);
                 }
             }
             images.push(image); // add loading image to images array
@@ -321,11 +319,11 @@ window.addEventListener("load", function () {
             context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
         }
 
-
-
         if (!finish()) {
-            requestAnimationFrame(animate);
+            animation = requestAnimationFrame(animate);
         }
+
+        console.log('test')
 
     }
 

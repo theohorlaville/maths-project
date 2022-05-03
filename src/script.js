@@ -199,12 +199,12 @@ window.addEventListener("load", function () {
 
     // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
     function random_position_x(){
-        let random_position_x = getRandomArbitrary(1, canvas.width - 15);
+        let random_position_x = getRandomArbitrary(1, canvas.width - 30);
         return random_position_x;
     }
 
     function random_position_y(){
-        let random_position_y = getRandomArbitrary(1, canvas.width - 15);
+        let random_position_y = getRandomArbitrary(1, canvas.height - 30);
         return random_position_y;
     }
 
@@ -285,8 +285,8 @@ window.addEventListener("load", function () {
   
         for(let i = 0; i<20; i++ ){
 
-            if (image_informations[i].position_x > canvas.width - 20 || image_informations[i].position_x < 0) image_informations[i].direction_x = -image_informations[i].direction_x;
-            if (image_informations[i].position_y > canvas.height - 20 || image_informations[i].position_y < 0) image_informations[i].direction_y = -image_informations[i].direction_y;
+            if (image_informations[i].position_x > canvas.width -30|| image_informations[i].position_x < 0) image_informations[i].direction_x = -image_informations[i].direction_x;
+            if (image_informations[i].position_y > canvas.height-30 || image_informations[i].position_y < 0) image_informations[i].direction_y = -image_informations[i].direction_y;
 
             image_informations[i].position_x += image_informations[i].direction_x;
             image_informations[i].position_y += image_informations[i].direction_y;

@@ -32,14 +32,19 @@ window.addEventListener("load", function () {
 
     // VARIABLES POSITION/DIRECTION DES BYSTANDERS ET DU WANTED
 
-    let image_position_x = getRandomArbitrary(1, canvas.width - 1)
-    let image_position_y = getRandomArbitrary(1, canvas.height - 1)
+
+    let image_direction_x = 0;
+    let image_direction_y = 0;
+    let image_position_x = 0;
+    let image_position_y = 0;
+
 
     let wanted_direction_x = 0;
     let wanted_direction_y = 0;
     let wanted_position_x = 0;
     let wanted_position_y = 0;
 
+    let image_position = []
 
 
 
@@ -93,7 +98,7 @@ window.addEventListener("load", function () {
     // FONCTION RANDOM : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
     function getRandomArbitrary(min, max) {
-        return Math.random() * (max - min) + min;
+        return Number(Math.random() * (max - min) + min);
     }
 
     // LANCEMENT DU JEU : AFFICHAGE D'UN NOUVEAU WANTED, DU SCORE, CHARGEMENT DES IMG, INITIALISATION DU WANTED SUR LE CANVAS
@@ -101,6 +106,7 @@ window.addEventListener("load", function () {
     function start() {
         initializing_game_infos()
         initializing_wanted()
+        initializing_bystanders()
         change_wanted()
         display_score()
         if (!imageload) {
@@ -119,7 +125,7 @@ window.addEventListener("load", function () {
     }
 
     function initializing_game_infos() {
-        temps = 2;
+        temps = 200;
         score = 0;
     }
 
@@ -192,13 +198,24 @@ window.addEventListener("load", function () {
     }
 
     // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
+    function random_position_x(){
+        let random_position_x = getRandomArbitrary(1, canvas.width - 15);
+        return random_position_x;
+    }
+
+    function random_position_y(){
+        let random_position_y = getRandomArbitrary(1, canvas.width - 15);
+        return random_position_y;
+    }
 
     function initializing_wanted() {
         let directionX = -1;
         let directionY = -1;
 
-        wanted_position_x = getRandomArbitrary(1, canvas.width - 15)
-        wanted_position_y = getRandomArbitrary(1, canvas.height - 15)
+        /*wanted_position_x = getRandomArbitrary(1, canvas.width - 15)
+        wanted_position_y = getRandomArbitrary(1, canvas.height - 15)*/
+        wanted_position_x = random_position_x();
+        wanted_position_y = random_position_y();
 
         if (Math.round(Math.random()) == 1) { directionX = 1; }
         else directionX = -1;
@@ -222,19 +239,69 @@ window.addEventListener("load", function () {
         wanted_position_y += wanted_direction_y;
 
     }
+
+    //Fonction qui sert de struct pour les donnee d'une image    
+
+   
+
     // ANIMATION DES BYSTANDERS : A FAIRE
 
-    function animation_bystander() {
-        /*
-        if (image_position_x > 0 && image_position_x < canvas.width) {
+    
+    function initializing_bystanders() {
+        let directionX = -1;
+        let directionY = -1;
+        let image_positionX = 0;
+        let image_positionY = 0;
 
-            image_position_x += image_direction
+        for (let i=0; i<20; i++){
+            image_positionX = random_position_x();
+            image_positionY = random_position_y();
+
+            if (Math.round(Math.random()) == 1) { directionX = 1; }
+            else directionX = -1;
+
+            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+
+            if (Math.round(Math.random()) == 1) { directionY = 1; }
+            else directionY = -1;
+
+            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+
+            const image_data = {
+                position_x : parseFloat(image_positionX),
+                position_y : image_positionY,
+                direction_x : image_directionX,
+                direction_y : image_directionY
+            }
+
+           // console.log(image_data)
+           // console.log(image_data.position_x)
+
+            image_position[i]= image_data
+            // ok console.log(image_position[i].position_x)
+
         }
-        else {
-            image_direction *= -1
-            image_position_x += image_direction
-        }*/
     }
+
+    function animation_bystander() {
+  
+        for(let i = 0; i<20; i++ ){
+
+            if (image_position[i].position_x > canvas.width - 20 || image_position[i].position_x < 0) image_position[i].direction_x = -image_position[i].direction_x;
+            if (image_position[i].position_y > canvas.height - 20 || image_position[i].position_y < 0) image_position[i].direction_y = -image_position[i].direction_y;
+
+            image_position[i].position_x += Number(image_position[i].direction_x);
+            image_position[i].position_y += Number(image_position[i].direction_y);
+
+
+            let test = image_position[i].position_x
+            console.log(test)
+           
+        }
+        
+    }
+
+    
 
 
     // FONCTION D'AFFICHAGE
@@ -243,19 +310,17 @@ window.addEventListener("load", function () {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         animation_wanted()
-        animation_bystander()
 
         context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
 
-        /*
-        pasX = 10
-        pasY = 0
-        for (let i = 1; i < 300; i++) {
-            pasX += 15
-            pasY = 5 * (i % 10)
-            context.drawImage(images[1], image_position_x + pasX, 20 + pasY, img_size, img_size);
+        animation_bystander()   
+
+        for(let i=0; i<20; i++){
+            
+            context.drawImage(images[1], image_position[i].position_x ,  image_position[i].position_y, img_size, img_size);
         }
-        */
+
+
 
         if (!finish()) {
             requestAnimationFrame(animate);
@@ -278,6 +343,7 @@ window.addEventListener("load", function () {
                 add_time()
                 change_wanted()
                 initializing_wanted()
+                initializing_bystanders()
             }
         }
     }

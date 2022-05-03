@@ -44,7 +44,7 @@ window.addEventListener("load", function () {
     let wanted_position_x = 0;
     let wanted_position_y = 0;
 
-    let image_position = []
+    let image_informations = []
 
 
 
@@ -267,18 +267,16 @@ window.addEventListener("load", function () {
 
             let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
 
+            // Create each time a new image data object with new positions
             const image_data = {
-                position_x : parseFloat(image_positionX),
+                position_x : image_positionX,
                 position_y : image_positionY,
                 direction_x : image_directionX,
                 direction_y : image_directionY
             }
 
-           // console.log(image_data)
-           // console.log(image_data.position_x)
-
-            image_position[i]= image_data
-            // ok console.log(image_position[i].position_x)
+            // We put each Image data object in the image information array at the index i 
+            image_informations[i]= image_data
 
         }
     }
@@ -287,15 +285,11 @@ window.addEventListener("load", function () {
   
         for(let i = 0; i<20; i++ ){
 
-            if (image_position[i].position_x > canvas.width - 20 || image_position[i].position_x < 0) image_position[i].direction_x = -image_position[i].direction_x;
-            if (image_position[i].position_y > canvas.height - 20 || image_position[i].position_y < 0) image_position[i].direction_y = -image_position[i].direction_y;
+            if (image_informations[i].position_x > canvas.width - 20 || image_informations[i].position_x < 0) image_informations[i].direction_x = -image_informations[i].direction_x;
+            if (image_informations[i].position_y > canvas.height - 20 || image_informations[i].position_y < 0) image_informations[i].direction_y = -image_informations[i].direction_y;
 
-            image_position[i].position_x += Number(image_position[i].direction_x);
-            image_position[i].position_y += Number(image_position[i].direction_y);
-
-
-            let test = image_position[i].position_x
-            console.log(test)
+            image_informations[i].position_x += image_informations[i].direction_x;
+            image_informations[i].position_y += image_informations[i].direction_y;
            
         }
         
@@ -315,9 +309,10 @@ window.addEventListener("load", function () {
 
         animation_bystander()   
 
+        // draw 20 by standers with different positons
         for(let i=0; i<20; i++){
             
-            context.drawImage(images[1], image_position[i].position_x ,  image_position[i].position_y, img_size, img_size);
+            context.drawImage(images[1], image_informations[i].position_x ,  image_informations[i].position_y, img_size, img_size);
         }
 
 

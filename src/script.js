@@ -20,6 +20,8 @@ window.addEventListener("load", function () {
     var score;
     var bool = false
     var wanted_number;
+    var bystander_number = [];
+
 
 
     // VARIABLES EN LIEN AVEC LE CHARGEMENT D'IMAGES
@@ -107,7 +109,6 @@ window.addEventListener("load", function () {
         initializing_game_infos()
         initializing_wanted()
         initializing_bystanders()
-        change_wanted()
         display_score()
         if (!imageload) {
             load_images()
@@ -127,6 +128,7 @@ window.addEventListener("load", function () {
     function initializing_game_infos() {
         temps = 200;
         score = 0;
+        change_wanted()
     }
 
 
@@ -198,12 +200,12 @@ window.addEventListener("load", function () {
     }
 
     // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
-    function random_position_x(){
+    function random_position_x() {
         let random_position_x = getRandomArbitrary(1, canvas.width - 30);
         return random_position_x;
     }
 
-    function random_position_y(){
+    function random_position_y() {
         let random_position_y = getRandomArbitrary(1, canvas.height - 30);
         return random_position_y;
     }
@@ -242,18 +244,19 @@ window.addEventListener("load", function () {
 
     //Fonction qui sert de struct pour les donnee d'une image    
 
-   
+
 
     // ANIMATION DES BYSTANDERS : A FAIRE
 
-    
+
     function initializing_bystanders() {
+        console.log(wanted_number)
         let directionX = -1;
         let directionY = -1;
         let image_positionX = 0;
         let image_positionY = 0;
 
-        for (let i=0; i<20; i++){
+        for (let i = 0; i < 20; i++) {
             image_positionX = random_position_x();
             image_positionY = random_position_y();
 
@@ -269,33 +272,36 @@ window.addEventListener("load", function () {
 
             // Create each time a new image data object with new positions
             const image_data = {
-                position_x : image_positionX,
-                position_y : image_positionY,
-                direction_x : image_directionX,
-                direction_y : image_directionY
+                position_x: image_positionX,
+                position_y: image_positionY,
+                direction_x: image_directionX,
+                direction_y: image_directionY
             }
 
             // We put each Image data object in the image information array at the index i 
-            image_informations[i]= image_data
+            image_informations[i] = image_data
+            bystander_number[i] = Math.round(getRandomArbitrary(0, 4))
+            while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) }
+
 
         }
     }
 
     function animation_bystander() {
-  
-        for(let i = 0; i<20; i++ ){
 
-            if (image_informations[i].position_x > canvas.width -30|| image_informations[i].position_x < 0) image_informations[i].direction_x = -image_informations[i].direction_x;
-            if (image_informations[i].position_y > canvas.height-30 || image_informations[i].position_y < 0) image_informations[i].direction_y = -image_informations[i].direction_y;
+        for (let i = 0; i < 20; i++) {
+
+            if (image_informations[i].position_x > canvas.width - 30 || image_informations[i].position_x < 0) image_informations[i].direction_x = -image_informations[i].direction_x;
+            if (image_informations[i].position_y > canvas.height - 30 || image_informations[i].position_y < 0) image_informations[i].direction_y = -image_informations[i].direction_y;
 
             image_informations[i].position_x += image_informations[i].direction_x;
             image_informations[i].position_y += image_informations[i].direction_y;
-           
+
         }
-        
+
     }
 
-    
+
 
 
     // FONCTION D'AFFICHAGE
@@ -307,12 +313,12 @@ window.addEventListener("load", function () {
 
         context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
 
-        animation_bystander()   
+        animation_bystander()
 
         // draw 20 by standers with different positons
-        for(let i=0; i<20; i++){
-            
-            context.drawImage(images[1], image_informations[i].position_x ,  image_informations[i].position_y, img_size, img_size);
+        for (let i = 0; i < 20; i++) {
+
+            context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
         }
 
 

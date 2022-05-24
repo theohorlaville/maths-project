@@ -117,9 +117,10 @@ window.addEventListener("load", function () {
     // LOI UNIFORME : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
     function uniforme(min, max) {
-        return (Math.random() * (max - min)) + min;
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.random() * (max - min + 1) + min
     }
-
     function rademacher() {
         if (Math.random() < 1 / 2) { return -1 }
         else return 1
@@ -292,7 +293,9 @@ window.addEventListener("load", function () {
     // CHANGE LE WANTED SUR LE CANVAS ET SUR L'AFFICHE (RANDOM ENTRE LES DIFFERENTES IMG EQUIPROBABLE)
 
     function change_wanted() {
-        wanted_number = Math.round(uniforme(1, wanted_plage))
+        wanted_number = Math.round(uniforme(1, wanted_plage-1))
+        console.log(wanted_plage)
+        console.log(wanted_number)
         display_wanted(wanted_number)
     }
 
@@ -316,7 +319,7 @@ window.addEventListener("load", function () {
 
     // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
     function random_position_x() {
-        let random_position_x = uniforme(1, canvas.width - 30); // gausienne 
+        let random_position_x = uniforme(1, canvas.width - 30); 
         return random_position_x;
     }
 
@@ -329,8 +332,6 @@ window.addEventListener("load", function () {
         let directionX = -1;
         let directionY = -1;
 
-        /*wanted_position_x =uniforme(1, canvas.width - 15)
-        wanted_position_y =uniforme(1, canvas.height - 15)*/
         wanted_position_x = random_position_x();
         wanted_position_y = random_position_y();
 

@@ -115,7 +115,7 @@ window.addEventListener("load", function () {
     }
 
     function exponentielle() {
-        return -Math.log(getRandomArbitrary(0, 1)) / 0.5
+        return -Math.log(uniformLaw(0, 1)) / 0.5
     }
 
     // LOI NORMALE / GAUSSIENNE : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
@@ -229,7 +229,7 @@ window.addEventListener("load", function () {
     //  utilise une gaussienne pour le temps
 
     function add_time() {
-        temps += Math.round(normalLaw(10,20))
+        temps += Math.round(normalLaw(5,2))
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -429,19 +429,19 @@ window.addEventListener("load", function () {
             animation_bystander()
             for (let i = 0; i < 20; i++) {
 
-                context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+                context.drawImage(images[bystander_number[i]-1], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
             }
 
             animation_wanted()
-            context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
+            context.drawImage(images[wanted_number-1], wanted_position_x, wanted_position_y, img_size, img_size);
         }
         else {
             animation_wanted()
-            context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
+            context.drawImage(images[wanted_number-1], wanted_position_x, wanted_position_y, img_size, img_size);
             animation_bystander()
             for (let i = 0; i < 20; i++) {
 
-                context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+                context.drawImage(images[bystander_number[i]-1], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
             }
 
         }

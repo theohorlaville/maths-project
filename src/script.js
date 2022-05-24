@@ -94,11 +94,23 @@ window.addEventListener("load", function () {
 
     })
 
+    /******************************************** RANDOM FUNCTIONS  ************************************************************/
+    // LOI UNIFORME : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
-    // FONCTION RANDOM : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
-
-    function getRandomArbitrary(min, max) {
+    function uniformLaw(min, max) {
         return Number(Math.random() * (max - min) + min);
+    }
+
+    // LOI NORMALE / GAUSSIENNE : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
+    function normalLaw(esperance, ecartType ){
+        let a = 0
+        let b = 0;
+        while(a === 0) a = Math.random(); //Converting [0,1) to (0,1)
+        while(b === 0) b = Math.random();
+        let x =  Math.sqrt( -2.0 * Math.log( a ) ) * Math.cos( 2.0 * Math.PI * b) ;
+
+
+        return esperance + ecartType * x;
     }
 
     // LANCEMENT DU JEU : AFFICHAGE D'UN NOUVEAU WANTED, DU SCORE, CHARGEMENT DES IMG, INITIALISATION DU WANTED SUR LE CANVAS
@@ -160,9 +172,10 @@ window.addEventListener("load", function () {
     }
 
     // FONCTION RAJOUTE DU TEMPS ET ACTUALISE LE TIMER
+    //  utilise une gaussienne pour le temps
 
     function add_time() {
-        temps += 2;
+        temps += Math.round(normalLaw(10,20))
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -175,7 +188,7 @@ window.addEventListener("load", function () {
     // CHANGE LE WANTED SUR LE CANVAS ET SUR L'AFFICHE (RANDOM ENTRE LES DIFFERENTES IMG EQUIPROBABLE)
 
     function change_wanted() {
-        wanted_number = Math.round(getRandomArbitrary(0, 4))
+        wanted_number = Math.round(uniformLaw(0, 4))
         display_wanted(wanted_number)
     }
 
@@ -199,12 +212,12 @@ window.addEventListener("load", function () {
 
     // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
     function random_position_x() {
-        let random_position_x = getRandomArbitrary(1, canvas.width - 30);
+        let random_position_x = uniformLaw(1, canvas.width - 30); // gausienne 
         return random_position_x;
     }
 
     function random_position_y() {
-        let random_position_y = getRandomArbitrary(1, canvas.height - 30);
+        let random_position_y = uniformLaw(1, canvas.height - 30);
         return random_position_y;
     }
 
@@ -212,20 +225,20 @@ window.addEventListener("load", function () {
         let directionX = -1;
         let directionY = -1;
 
-        /*wanted_position_x = getRandomArbitrary(1, canvas.width - 15)
-        wanted_position_y = getRandomArbitrary(1, canvas.height - 15)*/
+        /*wanted_position_x =uniformLaw(1, canvas.width - 15)
+        wanted_position_y =uniformLaw(1, canvas.height - 15)*/
         wanted_position_x = random_position_x();
         wanted_position_y = random_position_y();
 
         if (Math.round(Math.random()) == 1) { directionX = 1; }
         else directionX = -1;
 
-        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * (-Math.log(getRandomArbitrary(0, 1))/0.5)/2;
+        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * (-Math.log(uniformLaw(0, 1))/0.5)/2;
 
         if (Math.round(Math.random()) == 1) { directionY = 1; }
         else directionY = -1;
 
-        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (-Math.log(getRandomArbitrary(0, 1))/0.5)/2;
+        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (-Math.log(uniformLaw(0, 1))/0.5)/2;
     }
 
     // ANIMATION DU WANTED : AVANCE ET REBONDI SUR LES MURS
@@ -261,12 +274,13 @@ window.addEventListener("load", function () {
             if (Math.round(Math.random()) == 1) { directionX = 1; }
             else directionX = -1;
 
-            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) *  (-Math.log(getRandomArbitrary(0, 1))/0.5)/2;
+            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) *  (-Math.log(uniformLaw(0, 1))/0.5)/2; // loi exponentielle à metrre ds fonction
+            // lambda = 0.5 donner possibilité au joueur de changer
 
             if (Math.round(Math.random()) == 1) { directionY = 1; }
             else directionY = -1;
 
-            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) *  (-Math.log(getRandomArbitrary(0, 1))/0.5)/2; // loi exponentielle  -ln (u)/Lambda
+            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) *  (-Math.log(uniformLaw(0, 1))/0.5)/2; // loi exponentielle  -ln (u)/Lambda
             //avec u une uniforme de 0 à 1
             
 
@@ -280,8 +294,8 @@ window.addEventListener("load", function () {
 
             // We put each Image data object in the image information array at the index i 
             image_informations[i] = image_data
-            bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario 
-            while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) }
+            bystander_number[i] = Math.round(uniformLaw(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario 
+            while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(uniformLaw(0, 4)) } // MARKOV
 
 
         }

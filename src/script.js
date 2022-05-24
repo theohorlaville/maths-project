@@ -13,6 +13,9 @@ window.addEventListener("load", function () {
     var footer = document.querySelector("footer")
     var wanted = document.querySelector("#wanted")
     var canvas = document.querySelector('canvas');
+    var parametres = document.querySelector("#parametres")
+    var displayParametres = document.querySelector("#displayParametres")
+    var options = document.querySelectorAll(".options")
     context = canvas.getContext('2d');
 
     // VARIABLES GLOBALES JEU
@@ -62,6 +65,10 @@ window.addEventListener("load", function () {
         bool = true
         gameover.style.display = "none"
         start()
+    })
+
+    displayParametres.addEventListener("click", function () {
+        parametres.style.display == "flex" ? parametres.style.display = "none" : parametres.style.display = "flex"
     })
 
     // CLICK SUR LE BOUTON RETOUR : RENITIALISATION DU JEU ET CHANGEMENT DE FENETRE
@@ -281,6 +288,7 @@ window.addEventListener("load", function () {
         let image_positionX = 0;
         let image_positionY = 0;
 
+
         for (let i = 0; i < 20; i++) {
             image_positionX = random_position_x();
             image_positionY = random_position_y();
@@ -309,6 +317,7 @@ window.addEventListener("load", function () {
             image_informations[i] = image_data
             bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario 
             while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) }
+            console.log(bystander_number[i])
 
 
         }

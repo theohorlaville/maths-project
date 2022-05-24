@@ -116,7 +116,7 @@ window.addEventListener("load", function () {
     // LOI UNIFORME : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
     function uniforme(min, max) {
-        return Number(Math.random() * (max - min) + min);
+        return Math.floor(Math.random() * (max - min) + min);
     }
 
     function rademacher() {

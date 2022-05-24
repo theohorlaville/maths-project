@@ -117,9 +117,7 @@ window.addEventListener("load", function () {
     // LOI UNIFORME : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
     function uniforme(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.random() * (max - min + 1) + min
+        return Math.floor(Math.random() * (max - min + 1) + min)
     }
     function rademacher() {
         if (Math.random() < 1 / 2) { return -1 }
@@ -132,7 +130,7 @@ window.addEventListener("load", function () {
     }
 
     function exponentielle() {
-        return -Math.log(uniforme(0, 1)) / lambda
+        return -Math.log(Math.random()) / lambda
     }
 
     // LOI NORMALE / GAUSSIENNE : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
@@ -224,14 +222,18 @@ window.addEventListener("load", function () {
         let ecart = 0
         let variance = 0
         moyVitesse.forEach(element => sum+=element)
-        console.log("sur un échantillon de ", moyVitesse.length, " clics :")
-        console.log("Vitesse moyenne théorique de notre personnage est de : 2 ")
+        console.log(moyVitesse)
+        console.log(sum)
+        console.log("sur un échantillon de ", moyVitesse.length, " niveaux :")
+        console.log("Vitesse moyenne théorique de notre personnage est de : ", options[0].value)
         moyenne = sum/moyVitesse.length
         console.log("Vitesse moyenne en pratique de notre personnage : ", moyenne)
 
         moyVitesse.forEach(element => ecart += (element-moyenne)*(element-moyenne))
+        console.log(ecart)
         variance  = ecart/moyVitesse.length
         console.log("Ecart-type de la vitesse de notre personnage en pratique : ", Math.sqrt(variance))
+        moyVitesse.length=0
     }
 
     // AFFICHAGE DU TEMPS : DEPEND DU BOOLEEN
@@ -268,8 +270,8 @@ window.addEventListener("load", function () {
 
     function add_time() {
         temps += Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25))
-        console.log(Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25)))
-        console.log(temps)
+      //  console.log(Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25)))
+      //  console.log(temps)
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -294,8 +296,8 @@ window.addEventListener("load", function () {
 
     function change_wanted() {
         wanted_number = Math.round(uniforme(1, wanted_plage-1))
-        console.log(wanted_plage)
-        console.log(wanted_number)
+       // console.log(wanted_plage)
+       // console.log(wanted_number)
         display_wanted(wanted_number)
     }
 
@@ -341,14 +343,13 @@ window.addEventListener("load", function () {
         else directionX = -1;
 
         let expo1 = exponentielle()
-        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * expo1 / 2;
+        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * expo1;
 
         if (Math.round(Math.random()) == 1) { directionY = 1; }
         else directionY = -1;
 
-        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * expo1 / 2;
-
-        moyVitesse.push(expo1)
+        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * expo1;
+        moyVitesse.push(Math.abs(expo1))
     }
 
     // ANIMATION DU WANTED : AVANCE ET REBONDI SUR LES MURS
@@ -391,7 +392,7 @@ window.addEventListener("load", function () {
             if (Math.round(Math.random()) == 1) { directionY = 1; }
             else directionY = -1;
 
-            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle() / 2; 
+            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle(); 
             //avec u une uniforme de 0 à 1
 
 

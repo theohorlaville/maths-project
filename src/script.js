@@ -38,6 +38,7 @@ window.addEventListener("load", function () {
 
 
 
+
     // VARIABLES EN LIEN AVEC LE CHARGEMENT D'IMAGES
 
     const images = []; /// array to hold images.
@@ -116,7 +117,7 @@ window.addEventListener("load", function () {
     // LOI UNIFORME : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
     function uniforme(min, max) {
-        return Math.floor(Math.random() * (max - min) + min);
+        return (Math.random() * (max - min)) + min;
     }
 
     function rademacher() {
@@ -426,9 +427,9 @@ window.addEventListener("load", function () {
     
                 case 6:
                     bystander_number[i] = valeurProbas(yoshi, bystander_values)
-                    break;
-            }
-
+                break;
+              }
+              
 
             // tombe sur 1 = premiere image on donne num et on check si c le mm num donné
             /*  bystander_number[i] = Math.round(uniforme(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario

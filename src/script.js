@@ -124,7 +124,7 @@ window.addEventListener("load", function () {
     }
 
     function initializing_game_infos() {
-        temps = 10;
+        temps = 50;
         score = 0;
         change_wanted()
     }
@@ -220,12 +220,12 @@ window.addEventListener("load", function () {
         if (Math.round(Math.random()) == 1) { directionX = 1; }
         else directionX = -1;
 
-        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * (-Math.log(getRandomArbitrary(0, 1))/0.5)/2;
 
         if (Math.round(Math.random()) == 1) { directionY = 1; }
         else directionY = -1;
 
-        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (-Math.log(getRandomArbitrary(0, 1))/0.5)/2;
     }
 
     // ANIMATION DU WANTED : AVANCE ET REBONDI SUR LES MURS
@@ -261,12 +261,14 @@ window.addEventListener("load", function () {
             if (Math.round(Math.random()) == 1) { directionX = 1; }
             else directionX = -1;
 
-            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) *  (-Math.log(getRandomArbitrary(0, 1))/0.5)/2;
 
             if (Math.round(Math.random()) == 1) { directionY = 1; }
             else directionY = -1;
 
-            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * (getRandomArbitrary(1, 100) / 100);
+            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) *  (-Math.log(getRandomArbitrary(0, 1))/0.5)/2; // loi exponentielle  -ln (u)/Lambda
+            //avec u une uniforme de 0 à 1
+            
 
             // Create each time a new image data object with new positions
             const image_data = {
@@ -278,12 +280,14 @@ window.addEventListener("load", function () {
 
             // We put each Image data object in the image information array at the index i 
             image_informations[i] = image_data
-            bystander_number[i] = Math.round(getRandomArbitrary(0, 4))
+            bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario 
             while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) }
 
 
         }
     }
+    // loi gaussienne centrée sur 10 ac esperance =  10 + variance = a quel point on est resséré sur le 10 
+    // quand on se trompe on diminue du temps 
 
     function animation_bystander() {
 

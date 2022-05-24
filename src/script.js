@@ -17,8 +17,10 @@ window.addEventListener("load", function () {
 
     // VARIABLES GLOBALES JEU
     var temps;
+    var temps_manche = 0
     var score;
     var animation;
+    var k;
     var bool = false
     var wanted_number;
     var bystander_number = [];
@@ -42,7 +44,6 @@ window.addEventListener("load", function () {
     let wanted_position_y = 0;
 
     let image_informations = []
-
 
 
     // CLICK SUR LE BOUTON PLAY DU MENU : LANCEMENT DU JEU ET CHANGEMENT DE FENETRE
@@ -71,6 +72,7 @@ window.addEventListener("load", function () {
         jeu.style.width = 0 + "%"
         bool = false
         temps = 0;
+        temps_manche = 0;
         gameover.style.display = "none"
         cancelAnimationFrame(animation)
         setTimeout(function () {
@@ -86,6 +88,7 @@ window.addEventListener("load", function () {
         jeu.style.width = 0 + "%"
         bool = false
         temps = 0;
+        temps_manche = 0;
         gameover.style.display = "none"
         cancelAnimationFrame(animation)
         setTimeout(function () {
@@ -99,6 +102,20 @@ window.addEventListener("load", function () {
 
     function uniformLaw(min, max) {
         return Number(Math.random() * (max - min) + min);
+    }
+
+    function rademacher() {
+        if (Math.random() < 1 / 2) { return -1 }
+        else return 1
+    }
+
+    function bernoulli(p) {
+        if (Math.random() < p) { return 1 }
+        else return 0
+    }
+
+    function exponentielle() {
+        return -Math.log(getRandomArbitrary(0, 1)) / 0.5
     }
 
     // LOI NORMALE / GAUSSIENNE : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
@@ -184,6 +201,7 @@ window.addEventListener("load", function () {
     function display_time() {
         if (bool) {
             temps--
+            temps_manche++
             if (temps >= 0) {
                 timer.innerHTML = "temps restant : " + temps
 
@@ -198,7 +216,6 @@ window.addEventListener("load", function () {
     function display_score() {
         scoreBoard[0].innerHTML = "score : " + score
         scoreBoard[1].innerHTML = "score : " + score
-
     }
 
     // AFFICHAGE DU WANTED (pas sur le canvas mais en haut)
@@ -218,7 +235,18 @@ window.addEventListener("load", function () {
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
 
     function add_score() {
-        score++
+        if (temps_manche >= 0 && temps_manche < 3) {
+            if (bernoulli(0.6)) { score += 10 }
+            else { score += 8 }
+        }
+        if (temps_manche >= 3 && temps_manche < 10) {
+            if (bernoulli(0.3)) { score += 4 }
+            else { score += 5 }
+        }
+        if (temps_manche >= 10) {
+            if (bernoulli(0.9)) { score += 2 }
+            else { score += 3 }
+        }
         display_score()
     }
 
@@ -267,15 +295,17 @@ window.addEventListener("load", function () {
         wanted_position_x = random_position_x();
         wanted_position_y = random_position_y();
 
+        k = rademacher()
+
         if (Math.round(Math.random()) == 1) { directionX = 1; }
         else directionX = -1;
 
-        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * (-Math.log(uniformLaw(0, 1))/0.5)/2;
+        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * exponentielle() / 2;
 
         if (Math.round(Math.random()) == 1) { directionY = 1; }
         else directionY = -1;
 
-        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * (-Math.log(uniformLaw(0, 1))/0.5)/2;
+        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle() / 2;
     }
 
     // ANIMATION DU WANTED : AVANCE ET REBONDI SUR LES MURS
@@ -298,7 +328,6 @@ window.addEventListener("load", function () {
 
 
     function initializing_bystanders() {
-        console.log(wanted_number)
         let directionX = -1;
         let directionY = -1;
         let image_positionX = 0;
@@ -311,15 +340,14 @@ window.addEventListener("load", function () {
             if (Math.round(Math.random()) == 1) { directionX = 1; }
             else directionX = -1;
 
-            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) *  (-Math.log(uniformLaw(0, 1))/0.5)/2; // loi exponentielle à metrre ds fonction
-            // lambda = 0.5 donner possibilité au joueur de changer
+            let image_directionX = directionX * Math.cos(Math.PI / 180 * 50) * exponentielle() / 2;
 
             if (Math.round(Math.random()) == 1) { directionY = 1; }
             else directionY = -1;
 
-            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) *  (-Math.log(uniformLaw(0, 1))/0.5)/2; // loi exponentielle  -ln (u)/Lambda
+            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle() / 2; // loi exponentielle  -ln (u)/Lambda
             //avec u une uniforme de 0 à 1
-            
+
 
             // Create each time a new image data object with new positions
             const image_data = {
@@ -396,22 +424,34 @@ window.addEventListener("load", function () {
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        animation_wanted()
+        if (k == -1) {
 
-        context.drawImage(images[wanted_number-1], wanted_position_x, wanted_position_y, img_size, img_size);
+            animation_bystander()
+            for (let i = 0; i < 20; i++) {
 
-        animation_bystander()
+                context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+            }
 
-        // draw 20 by standers with different positons
-        for (let i = 0; i < 20; i++) {
-            context.drawImage(images[bystander_number[i]-1], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+            animation_wanted()
+            context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
         }
+        else {
+            animation_wanted()
+            context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
+            animation_bystander()
+            for (let i = 0; i < 20; i++) {
+
+                context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+            }
+
+        }
+
+
 
         if (!finish()) {
             animation = requestAnimationFrame(animate);
         }
 
-        console.log('test')
 
     }
 
@@ -428,6 +468,7 @@ window.addEventListener("load", function () {
 
                 add_score()
                 add_time()
+                temps_manche = 0;
                 change_wanted()
                 initializing_wanted()
                 initializing_bystanders()

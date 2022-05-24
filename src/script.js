@@ -27,6 +27,8 @@ window.addEventListener("load", function () {
     var bool = false
     var wanted_number;
     var bystander_number = [];
+    let moyVitesse= []
+
 
 
 
@@ -192,16 +194,33 @@ window.addEventListener("load", function () {
     function finish() {
         if (temps <= 0 && bool == true) {
             gameover.style.display = "flex"
+            display_info()
+
             return true;
         }
     }
 
     function initializing_game_infos() {
-        temps = 50;
+        temps = 30;
         score = 0;
         change_wanted()
     }
 
+    function display_info(){
+        let sum =0
+        let moyenne = 0
+        let ecart = 0
+        let variance = 0
+        moyVitesse.forEach(element => sum+=element)
+        console.log("sur un échantillon de ", moyVitesse.length, " clics :")
+        console.log("Vitesse moyenne théorique de notre personnage est de : 2 ")
+        moyenne = sum/moyVitesse.length
+        console.log("Vitesse moyenne en pratique de notre personnage : ", moyenne)
+
+        moyVitesse.forEach(element => ecart += (element-moyenne)*(element-moyenne))
+        variance  = ecart/moyVitesse.length
+        console.log("Ecart-type de la vitesse de notre personnage en pratique : ", Math.sqrt(variance))
+    }
 
     // AFFICHAGE DU TEMPS : DEPEND DU BOOLEEN
 
@@ -307,12 +326,15 @@ window.addEventListener("load", function () {
         if (Math.round(Math.random()) == 1) { directionX = 1; }
         else directionX = -1;
 
-        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * exponentielle() / 2;
+        let expo1 = exponentielle()
+        wanted_direction_x = directionX * Math.cos(Math.PI / 180 * 50) * expo1 / 2;
 
         if (Math.round(Math.random()) == 1) { directionY = 1; }
         else directionY = -1;
 
-        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle() / 2;
+        wanted_direction_y = directionY * Math.sin(Math.PI / 180 * 50) * expo1 / 2;
+
+        moyVitesse.push(expo1)
     }
 
     // ANIMATION DU WANTED : AVANCE ET REBONDI SUR LES MURS
@@ -353,7 +375,7 @@ window.addEventListener("load", function () {
             if (Math.round(Math.random()) == 1) { directionY = 1; }
             else directionY = -1;
 
-            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle() / 2; // loi exponentielle  -ln (u)/Lambda
+            let image_directionY = directionY * Math.sin(Math.PI / 180 * 50) * exponentielle() / 2; 
             //avec u une uniforme de 0 à 1
 
 
@@ -370,32 +392,26 @@ window.addEventListener("load", function () {
             switch (wanted_number) {
                 case 1:
                     bystander_number[i]= valeurProbas(mario, bystander_values)
-                    console.log(  bystander_number[i])                  
                   break;
                   
                 case 2:
                   bystander_number[i] = valeurProbas(luigi, bystander_values)
-                  console.log(  bystander_number[i])                  
                   break;
 
                 case 3:
                     bystander_number[i] = valeurProbas(wario, bystander_values)
-                    console.log(  bystander_number[i])                  
                 break;
 
                 case 4:
                     bystander_number[i] = valeurProbas(peach, bystander_values)
-                    console.log(  bystander_number[i])                  
                 break;
                 
                 case 5:
                     bystander_number[i] = valeurProbas(bowser, bystander_values)
-                    console.log(  bystander_number[i])                  
                 break;
     
                 case 6:
                     bystander_number[i] = valeurProbas(yoshi, bystander_values)
-                    console.log(  bystander_number[i])                  
                 break;
               }
               

@@ -104,10 +104,10 @@ window.addEventListener("load", function () {
 
     })
 
+    /******************************************** RANDOM FUNCTIONS  ************************************************************/
+    // LOI UNIFORME : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
 
-    //  Lois aléatoires
-
-    function getRandomArbitrary(min, max) {
+    function uniformLaw(min, max) {
         return Number(Math.random() * (max - min) + min);
     }
 
@@ -122,8 +122,57 @@ window.addEventListener("load", function () {
     }
 
     function exponentielle() {
-        return -Math.log(getRandomArbitrary(0, 1)) / 0.5
+        return -Math.log(uniformLaw(0, 1)) / 0.5
     }
+
+    // LOI NORMALE / GAUSSIENNE : RETOURNE UNE VALEUR EQUIPROBABLE ENTRE UN MIN ET MAX
+    function normalLaw(esperance, ecartType ){
+        let a = 0
+        let b = 0;
+        while(a === 0) a = Math.random(); //Converting [0,1) to (0,1)
+        while(b === 0) b = Math.random();
+        let x =  Math.sqrt( -2.0 * Math.log( a ) ) * Math.cos( 2.0 * Math.PI * b) ;
+
+
+        return esperance + ecartType * x;
+    }
+
+    // LOI MARKOV : 
+
+        // Object with the charcters value
+        //let bystander_values = ["./assets/1.png", "./assets/2.png", "./assets/3.png", "./assets/4.png", "./assets/5.png", "./assets/6.png"]
+        let bystander_values = [1,2,3,4,5,6]
+        // Array Mario : 
+        let mario = [0.,0.2,0.2,0.2,0.2,0.2]
+
+        // Array Luigi : 
+        let luigi = [0.1,0.,0.2,0.1,0.2,0.4]
+
+        // Array Wario : 
+        let wario = [0.2,0.1,0.,0.3,0.3,0.1]
+
+        // Array Peach : 
+        let peach = [0.2,0.1,0.3,0.,0.3,0.1]
+
+        // Array Bowser : 
+        let bowser = [0.2,0.1,0.3,0.3,0.,0.1]
+
+        // Array Yoshi : 
+        let yoshi = [0.1,0.4,0.1,0.1,0.3,0.]
+
+        function valeurProbas( bystander_probas, bystander_value){
+            let random = Math.random();
+            let i = 0;
+            let new_proba = bystander_probas[0];
+
+            while(random > new_proba && i < 5){
+                new_proba += bystander_probas[i+1];
+                i++;
+            }
+            return bystander_value[i];
+        }
+
+
 
     // LANCEMENT DU JEU : AFFICHAGE D'UN NOUVEAU WANTED, DU SCORE, CHARGEMENT DES IMG, INITIALISATION DU WANTED SUR LE CANVAS
 
@@ -179,14 +228,15 @@ window.addEventListener("load", function () {
     // AFFICHAGE DU WANTED (pas sur le canvas mais en haut)
 
     function display_wanted(i) {
-        i++
+       // i++
         wanted.src = "./assets/" + i + ".png"
     }
 
     // FONCTION RAJOUTE DU TEMPS ET ACTUALISE LE TIMER
+    //  utilise une gaussienne pour le temps
 
     function add_time() {
-        temps += 2;
+        temps += Math.round(normalLaw(5,2))
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -210,7 +260,7 @@ window.addEventListener("load", function () {
     // CHANGE LE WANTED SUR LE CANVAS ET SUR L'AFFICHE (RANDOM ENTRE LES DIFFERENTES IMG EQUIPROBABLE)
 
     function change_wanted() {
-        wanted_number = Math.round(getRandomArbitrary(0, 4))
+        wanted_number = Math.round(uniformLaw(1, 6))
         display_wanted(wanted_number)
     }
 
@@ -234,12 +284,12 @@ window.addEventListener("load", function () {
 
     // INITIALISATION DU WANTED : POSITION RANDOM, VITESSE RANDOM, DIRECTION RANDOM
     function random_position_x() {
-        let random_position_x = getRandomArbitrary(1, canvas.width - 30);
+        let random_position_x = uniformLaw(1, canvas.width - 30); // gausienne 
         return random_position_x;
     }
 
     function random_position_y() {
-        let random_position_y = getRandomArbitrary(1, canvas.height - 30);
+        let random_position_y = uniformLaw(1, canvas.height - 30);
         return random_position_y;
     }
 
@@ -247,6 +297,8 @@ window.addEventListener("load", function () {
         let directionX = -1;
         let directionY = -1;
 
+        /*wanted_position_x =uniformLaw(1, canvas.width - 15)
+        wanted_position_y =uniformLaw(1, canvas.height - 15)*/
         wanted_position_x = random_position_x();
         wanted_position_y = random_position_y();
 
@@ -315,9 +367,42 @@ window.addEventListener("load", function () {
 
             // We put each Image data object in the image information array at the index i 
             image_informations[i] = image_data
-            bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario 
-            while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(getRandomArbitrary(0, 4)) }
-            console.log(bystander_number[i])
+            switch (wanted_number) {
+                case 1:
+                    bystander_number[i]= valeurProbas(mario, bystander_values)
+                    console.log(  bystander_number[i])                  
+                  break;
+                  
+                case 2:
+                  bystander_number[i] = valeurProbas(luigi, bystander_values)
+                  console.log(  bystander_number[i])                  
+                  break;
+
+                case 3:
+                    bystander_number[i] = valeurProbas(wario, bystander_values)
+                    console.log(  bystander_number[i])                  
+                break;
+
+                case 4:
+                    bystander_number[i] = valeurProbas(peach, bystander_values)
+                    console.log(  bystander_number[i])                  
+                break;
+                
+                case 5:
+                    bystander_number[i] = valeurProbas(bowser, bystander_values)
+                    console.log(  bystander_number[i])                  
+                break;
+    
+                case 6:
+                    bystander_number[i] = valeurProbas(yoshi, bystander_values)
+                    console.log(  bystander_number[i])                  
+                break;
+              }
+              
+
+            // tombe sur 1 = premiere image on donne num et on check si c le mm num donné 
+          /*  bystander_number[i] = Math.round(uniformLaw(0, 4)) // we would like to have different probability regarding the wanted element e.g if wanted == yoshi proba bowser sup à mario 
+            while (bystander_number[i] == wanted_number) { bystander_number[i] = Math.round(uniformLaw(0, 4)) } // MARKOV*/
 
 
         }
@@ -352,19 +437,19 @@ window.addEventListener("load", function () {
             animation_bystander()
             for (let i = 0; i < 20; i++) {
 
-                context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+                context.drawImage(images[bystander_number[i]-1], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
             }
 
             animation_wanted()
-            context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
+            context.drawImage(images[wanted_number-1], wanted_position_x, wanted_position_y, img_size, img_size);
         }
         else {
             animation_wanted()
-            context.drawImage(images[wanted_number], wanted_position_x, wanted_position_y, img_size, img_size);
+            context.drawImage(images[wanted_number-1], wanted_position_x, wanted_position_y, img_size, img_size);
             animation_bystander()
             for (let i = 0; i < 20; i++) {
 
-                context.drawImage(images[bystander_number[i]], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
+                context.drawImage(images[bystander_number[i]-1], image_informations[i].position_x, image_informations[i].position_y, img_size, img_size);
             }
 
         }

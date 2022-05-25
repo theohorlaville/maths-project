@@ -296,8 +296,6 @@ window.addEventListener("load", function () {
 
     function change_wanted() {
         wanted_number = Math.round(uniforme(1, wanted_plage-1))
-       // console.log(wanted_plage)
-       // console.log(wanted_number)
         display_wanted(wanted_number)
     }
 

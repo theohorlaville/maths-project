@@ -267,7 +267,7 @@ window.addEventListener("load", function () {
     //  utilise une gaussienne pour le temps
 
     function add_time() {
-        temps += Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25))
+        temps += Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.10))
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD

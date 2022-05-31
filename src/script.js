@@ -167,7 +167,7 @@ window.addEventListener("load", function () {
     // Array Yoshi : 
     let yoshi = [0.1, 0.4, 0.1, 0.1, 0.3, 0.]
 
-    function valeurProbas(bystander_probas, bystander_value) {
+    function chaine_markov(bystander_probas, bystander_value) {
         let random = Math.random();
         let i = 0;
         let new_proba = bystander_probas[0];
@@ -402,27 +402,27 @@ window.addEventListener("load", function () {
             image_informations[i] = image_data
             switch (wanted_number) {
                 case 1:
-                    bystander_number[i]= valeurProbas(mario, bystander_values)
+                    bystander_number[i]= chaine_markov(mario, bystander_values)
                   break;
                   
                 case 2:
-                  bystander_number[i] = valeurProbas(luigi, bystander_values)
+                  bystander_number[i] = chaine_markov(luigi, bystander_values)
                   break;
 
                 case 3:
-                    bystander_number[i] = valeurProbas(wario, bystander_values)
+                    bystander_number[i] = chaine_markov(wario, bystander_values)
                 break;
 
                 case 4:
-                    bystander_number[i] = valeurProbas(peach, bystander_values)
+                    bystander_number[i] = chaine_markov(peach, bystander_values)
                 break;
                 
                 case 5:
-                    bystander_number[i] = valeurProbas(bowser, bystander_values)
+                    bystander_number[i] = chaine_markov(bowser, bystander_values)
                 break;
     
                 case 6:
-                    bystander_number[i] = valeurProbas(yoshi, bystander_values)
+                    bystander_number[i] = chaine_markov(yoshi, bystander_values)
                 break;
               }
               

@@ -140,8 +140,7 @@ window.addEventListener("load", function () {
         while (a === 0) a = Math.random(); //Converting [0,1) to (0,1)
         while (b === 0) b = Math.random();
         let x = Math.sqrt(-2.0 * Math.log(a)) * Math.cos(2.0 * Math.PI * b);
-
-
+        
         return esperance + ecartType * x;
     }
 
@@ -222,15 +221,14 @@ window.addEventListener("load", function () {
         let ecart = 0
         let variance = 0
         moyVitesse.forEach(element => sum+=element)
-        console.log(moyVitesse)
-        console.log(sum)
+        //console.log(sum)
         console.log("sur un échantillon de ", moyVitesse.length, " niveaux :")
         console.log("Vitesse moyenne théorique de notre personnage est de : ", options[0].value)
         moyenne = sum/moyVitesse.length
         console.log("Vitesse moyenne en pratique de notre personnage : ", moyenne)
 
         moyVitesse.forEach(element => ecart += (element-moyenne)*(element-moyenne))
-        console.log(ecart)
+       // console.log(ecart)
         variance  = ecart/moyVitesse.length
         console.log("Ecart-type de la vitesse de notre personnage en pratique : ", Math.sqrt(variance))
         moyVitesse.length=0
@@ -270,8 +268,6 @@ window.addEventListener("load", function () {
 
     function add_time() {
         temps += Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25))
-      //  console.log(Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25)))
-      //  console.log(temps)
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -295,7 +291,7 @@ window.addEventListener("load", function () {
     // CHANGE LE WANTED SUR LE CANVAS ET SUR L'AFFICHE (RANDOM ENTRE LES DIFFERENTES IMG EQUIPROBABLE)
 
     function change_wanted() {
-        wanted_number = Math.round(uniforme(1, wanted_plage-1))
+        wanted_number = Math.round(uniforme(1, wanted_plage))
         display_wanted(wanted_number)
     }
 

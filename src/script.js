@@ -267,7 +267,7 @@ window.addEventListener("load", function () {
     //  utilise une gaussienne pour le temps
 
     function add_time() {
-        temps += Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.10))
+        temps += Math.round(normal(parseInt(esperance2), parseInt(esperance2) * 0.25))
     }
 
     // FONCTION RAJOUTE DU SCORE ET ACTUALISE LE SCOREBOARD
@@ -371,7 +371,7 @@ window.addEventListener("load", function () {
         let image_positionX = 0;
         let image_positionY = 0;
 
-        nbBystanders = Math.round(normal(parseInt(esperance1), parseInt(esperance1) * 0.25))
+        nbBystanders = Math.round(normal(parseInt(esperance1), parseInt(esperance1) * 0.1))
 
 
         for (let i = 0; i < nbBystanders; i++) {
